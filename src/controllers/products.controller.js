@@ -91,7 +91,7 @@ export const updateProduct = async (req, res) => {
       return res.status(404).send({ message: "Produto não encontrado" });
     }
 
-    if(verifyUrl(photo)) {
+    if(!verifyUrl(photo)) {
       return res.status(400).send({ message: "URL da imagem inválida" });
     }
 

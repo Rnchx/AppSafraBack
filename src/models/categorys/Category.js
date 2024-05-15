@@ -1,11 +1,6 @@
 export default class Category {
-  constructor(name, idCategory) {
-    this.id = this.generateId();
+  constructor(name, idProduct) {
     this.name = name;
-    this.idCategory = idCategory;
-  }
-
-  generateId() {
-    return Math.floor(Math.random() * 10000);
+    this.idCategory = idProduct;
   }
 }

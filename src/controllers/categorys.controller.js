@@ -51,13 +51,13 @@ try {
 
 export const createCategory = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name, idProduct } = req.body;
 
-    if(name == "") {
+    if(name == "" || idProduct == "") {
       return res.status(400).send({ message: "Preencha todos os campos" });
     }
     
-    const category = new Category(name);
+    const category = new Category(name, idProduct);
     await categorysRepository.createCategory(category);
     return res
       .status(201)
@@ -72,21 +72,21 @@ export const createCategory = async (req, res) => {
 export const updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, idCategory } = req.body;
+    const { name, idProduct } = req.body;
     const categoryById = await categorysRepository.getCategoryById(id);
     
     if (!categoryById) {
       return res.status(404).send({ message: "Categoria não encontrada" });
     }
 
-    if(name == "") {
+    if(name == "" || idProduct == "") {
       return res.status(400).send({ message: "Preencha todos os campos" });
     }
 
     const updatedCategory = await categorysRepository.updateCategory(
       id,
       name,
-      idCategory
+      idProduct
     );
     return res
       .status(200)
@@ -98,18 +98,18 @@ export const updateCategory = async (req, res) => {
   }
 };
 
-export const deleteProduct = async (req, res) => {
+export const deleteCategory = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = await productsRepository.getProductById(id);
-    if (!product) {
-      return res.status(404).send({ message: "Produto não encontrado" });
+    const category = await categorysRepository.getCategoryById(id);
+    if (!category) {
+      return res.status(404).send({ message: "Categoria não encontrada" });
     }
-    await productsRepository.deleteProduct(id);
-    return res.status(200).send({ message: "Produto deletado com sucesso" });
+    await categorysRepository.deleteCategory(id);
+    return res.status(200).send({ message: "Categoria deletada com sucesso" });
   } catch (error) {
     return res
       .status(500)
-      .send({ message: "Erro ao tentar deletar o produto", error: error.message });
+      .send({ message: "Erro ao tentar deletar a categoria", error: error.message });
   }
 };

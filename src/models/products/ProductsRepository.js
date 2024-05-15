@@ -44,8 +44,8 @@ export default class ProductsRepository {
   async createProduct(product) {
     try {
       await this.db.none(
-        "INSERT INTO products (id, name, price, description, validity, photo) VALUES ($1, $2, $3, $4, $5, $6)",
-        [product.id, product.name, product.price, product.description, product.validity, product.photo]
+        "INSERT INTO products (name, price, description, validity, photo) VALUES ($1, $2, $3, $4, $5)",
+        [product.name, product.price, product.description, product.validity, product.photo]
       );
       return product;
     } catch (error) {

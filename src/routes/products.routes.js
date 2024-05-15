@@ -13,7 +13,7 @@ const productsRouter = Router();
 
 productsRouter.get("/", getProducts);
 productsRouter.get("/:id", getProductById);
-productsRouter.get("/:name", getProductByName);
+productsRouter.get("/name/:name", getProductByName);
 productsRouter.post("/", createProduct);
 productsRouter.put("/:id", updateProduct);
 productsRouter.delete("/:id", deleteProduct);
