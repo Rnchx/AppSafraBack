@@ -28,11 +28,24 @@ export default class ProductsRepository {
     }
   }
 
+  async getProductByName(name) {
+    try {
+      const product = await this.db.oneOrNone(
+        "SELECT * FROM products WHERE name = $1",
+        name
+      );
+      return product;
+    } catch (error) {
+      console.error(`Failed to get product by name ${name}:`, error);
+      throw error;
+    }
+  }
+
   async createProduct(product) {
     try {
       await this.db.none(
-        "INSERT INTO products (id, name, price, category, validity) VALUES ($1, $2, $3, $4, $5)",
-        [product.id, product.name, product.price, product.category, product.validity]
+        "INSERT INTO products (id, name, price, description, validity, photo) VALUES ($1, $2, $3, $4, $5, $6)",
+        [product.id, product.name, product.price, product.description, product.validity, product.photo]
       );
       return product;
     } catch (error) {
@@ -41,7 +54,7 @@ export default class ProductsRepository {
     }
   }
 
-  async updateProduct(id, name, price, category, validity) {
+  async updateProduct(id, name, price, description, validity, photo) {
     try {
       const product = await this.getProductById(id);
 
@@ -50,8 +63,8 @@ export default class ProductsRepository {
       }
 
       const updatedProduct = await this.db.one(
-        "UPDATE products SET name = $1, price = $2, category = $3, validity = $4 WHERE id = $5 RETURNING *",
-        [name, price, category, validity, id]
+        "UPDATE products SET name = $1, price = $2, description = $3, validity = $4, photo = $5 WHERE id = $6 RETURNING *",
+        [name, price, description, validity, photo, id]
       );
 
       return updatedProduct;
