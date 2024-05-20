@@ -41,11 +41,24 @@ export default class ProductsRepository {
     }
   }
 
+  async getProductByType(type) {
+    try {
+      const product = await this.db.manyOrNone(
+        "SELECT * FROM products WHERE type = $1",
+        type
+      );
+      return product;
+    } catch (error) {
+      console.error(`Failed to get product by type ${type}:`, error);
+      throw error;
+    }
+  }
+
   async createProduct(product) {
     try {
       await this.db.none(
-        "INSERT INTO products (name, price, description, validity, photo) VALUES ($1, $2, $3, $4, $5)",
-        [product.name, product.price, product.description, product.validity, product.photo]
+        "INSERT INTO products (name, price, description, type, validity, photo) VALUES ($1, $2, $3, $4, $5, $6)",
+        [product.name, product.price, product.description, product.type, product.validity, product.photo]
       );
       return product;
     } catch (error) {
@@ -54,7 +67,7 @@ export default class ProductsRepository {
     }
   }
 
-  async updateProduct(id, name, price, description, validity, photo) {
+  async updateProduct(id, name, price, description, type, validity, photo) {
     try {
       const product = await this.getProductById(id);
 
@@ -63,8 +76,8 @@ export default class ProductsRepository {
       }
 
       const updatedProduct = await this.db.one(
-        "UPDATE products SET name = $1, price = $2, description = $3, validity = $4, photo = $5 WHERE id = $6 RETURNING *",
-        [name, price, description, validity, photo, id]
+        "UPDATE products SET name = $1, price = $2, description = $3, type = $4, validity = $5, photo = $6 WHERE id = $7 RETURNING *",
+        [name, price, description, type, validity, photo, id]
       );
 
       return updatedProduct;

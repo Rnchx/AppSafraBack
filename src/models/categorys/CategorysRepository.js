@@ -18,7 +18,7 @@ export default class CategorysRepository {
   async getCategoryById(id) {
     try {
       const product = await this.db.oneOrNone(
-        "SELECT * FROM cateogrys WHERE id = $1",
+        "SELECT * FROM categorys WHERE id = $1",
         id
       );
       return product;
@@ -30,7 +30,7 @@ export default class CategorysRepository {
 
   async getCategoryByName(name) {
     try {
-      const category = await this.db.oneOrNone(
+      const category = await this.db.manyOrNone(
         "SELECT * FROM categorys WHERE name = $1",
         name
       );

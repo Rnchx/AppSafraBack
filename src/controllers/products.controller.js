@@ -5,17 +5,17 @@ const productsRepository = new ProductsRepository();
 
 function verifyUrl(url) {
   var imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
-  
-    var extension = url.split('.').pop().toLowerCase();
 
-    return imageExtensions.includes(extension);
+  var extension = url.split('.').pop().toLowerCase();
+
+  return imageExtensions.includes(extension);
 }
 
 export const getProducts = async (req, res) => {
   try {
     const products = await productsRepository.getProducts();
     if (!products || products.length === 0) {
-      return res.status(404).send({ message: "Não há produtos cadastrados"});
+      return res.status(404).send({ message: "Não há produtos cadastrados" });
     }
     return res.status(200).send({ totalProducts: products.length, products });
   } catch (error) {
@@ -41,39 +41,58 @@ export const getProductById = async (req, res) => {
 };
 
 export const getProductByName = async (req, res) => {
-try {
-  const { name } = req.params;
-  const product = await productsRepository.getProductByName(name);
+  try {
+    const { name } = req.params;
+    const product = await productsRepository.getProductByName(name);
 
-  if (!product) {
-    return res.status(404).send({ message: "Produto não encontrado" });
-  }
+    if (!product) {
+      return res.status(404).send({ message: "Produto não encontrado" });
+    }
 
-  return res.status(200).send({ message: "Produto encontrado", product });
-} catch (error) {
-   return res
+    return res.status(200).send({ message: "Produto encontrado", product });
+  } catch (error) {
+    return res
       .status(500)
       .send({ message: "Erro ao buscar produto", error: error.message });
-}
+  }
+};
+
+export const getProductByType = async (req, res) => {
+  try {
+    const { type } = req.params;
+    const product = await productsRepository.getProductByType(type);
+
+    if (!product) {
+      return res.status(404).send({ message: "Produto não encontrado" });
+    }
+
+    return res.status(200).send({ message: "Produto encontrado", product });
+  } catch (error) {
+    return res
+      .status(500)
+      .send({ message: "Erro ao buscar produto", error: error.message });
+  }
 };
 
 export const createProduct = async (req, res) => {
   try {
-    const { name, price, description, validity, photo } = req.body;
+    const { name, price, description, type, validity, photo } = req.body;
 
-    if(name == "" || price == "" || description == "" || validity == "" || photo == "") {
+    if (name == "" || price == "" || description == "" || type == "" || validity == "" || photo == "") {
       return res.status(400).send({ message: "Preencha todos os campos" });
     }
 
-    if(!verifyUrl(photo)) {
+    if (!verifyUrl(photo)) {
       return res.status(400).send({ message: "URL da imagem inválida" });
     }
-    
-    const product = new Product(name, price, description, validity, photo);
+
+
+    const product = new Product(name, price, description, type, validity, photo);
+
     await productsRepository.createProduct(product);
-    return res
-      .status(201)
-      .send({ message: "Produto criado com sucesso", product });
+
+    return res.status(200).send({ message: "Produto criado com sucesso" });
+
   } catch (error) {
     return res
       .status(500)
@@ -84,18 +103,18 @@ export const createProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, price, description, validity, photo } = req.body;
+    const { name, price, description, type, validity, photo } = req.body;
     const productById = await productsRepository.getProductById(id);
-    
+
     if (!productById) {
       return res.status(404).send({ message: "Produto não encontrado" });
     }
 
-    if(!verifyUrl(photo)) {
+    if (!verifyUrl(photo)) {
       return res.status(400).send({ message: "URL da imagem inválida" });
     }
 
-    if(name == "" || price == "" ||description == "" || validity == "" || photo == "") {
+    if (name == "" || price == "" || description == "" || type == "" || validity == "" || photo == "") {
       return res.status(400).send({ message: "Preencha todos os campos" });
     }
 
@@ -104,6 +123,7 @@ export const updateProduct = async (req, res) => {
       name,
       price,
       description,
+      type,
       validity,
       photo
     );

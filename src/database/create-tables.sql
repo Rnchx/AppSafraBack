@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS products (
   name VARCHAR(255) NOT NULL,
   price DECIMAL(10,2) NOT NULL,
   description VARCHAR(200) NOT NULL,
+  type VARCHAR(100) NOT NULL,
   validity VARCHAR(50) NOT NULL,
   photo VARCHAR(255) NOT NULL
 );
