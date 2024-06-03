@@ -45,8 +45,8 @@ export default class CategorysRepository {
     console.log(category);
     try {
       await this.db.none(
-        "INSERT INTO categorys (name, idProduct) VALUES ($1, $2)",
-        [category.name, category.idProduct]
+        "INSERT INTO categorys (name) VALUES ($1)",
+        [category.name]
       );
       return category;
     } catch (error) {
@@ -55,7 +55,7 @@ export default class CategorysRepository {
     }
   }
 
-  async updateCategory(id, name, idProduct) {
+  async updateCategory(id, name) {
     try {
       const product = await this.getProductById(id);
 
@@ -64,8 +64,8 @@ export default class CategorysRepository {
       }
 
       const updatedProduct = await this.db.one(
-        "UPDATE products SET name = $1, idProduct = $2 WHERE id = $3 RETURNING *",
-        [name, idProduct, id]
+        "UPDATE products SET name = $1 WHERE id = $2 RETURNING *",
+        [name, id]
       );
 
       return updatedProduct;

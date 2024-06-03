@@ -1,6 +1,5 @@
 export default class Category {
-  constructor(name, idProduct) {
+  constructor(name) {
     this.name = name;
-    this.idProduct = idProduct;
   }
 }
