@@ -76,9 +76,9 @@ export const getProductByType = async (req, res) => {
 
 export const createProduct = async (req, res) => {
   try {
-    const { name, price, description, type, validity, photo } = req.body;
+    const { name, price, description, type, validity, photo, idCategory } = req.body;
 
-    if (name == "" || price == "" || description == "" || type == "" || validity == "" || photo == "") {
+    if (name == "" || price == "" || description == "" || type == "" || validity == "" || photo == "" || idCategory == "") {
       return res.status(400).send({ message: "Preencha todos os campos" });
     }
 
@@ -87,7 +87,7 @@ export const createProduct = async (req, res) => {
     }
 
 
-    const product = new Product(name, price, description, type, validity, photo);
+    const product = new Product(name, price, description, type, validity, photo, idCategory);
 
     await productsRepository.createProduct(product);
 
@@ -103,7 +103,7 @@ export const createProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, price, description, type, validity, photo } = req.body;
+    const { name, price, description, type, validity, photo, idCategory } = req.body;
     const productById = await productsRepository.getProductById(id);
 
     if (!productById) {
@@ -114,7 +114,7 @@ export const updateProduct = async (req, res) => {
       return res.status(400).send({ message: "URL da imagem inválida" });
     }
 
-    if (name == "" || price == "" || description == "" || type == "" || validity == "" || photo == "") {
+    if (name == "" || price == "" || description == "" || type == "" || validity == "" || photo == "" || idCategory == "") {
       return res.status(400).send({ message: "Preencha todos os campos" });
     }
 
@@ -125,7 +125,8 @@ export const updateProduct = async (req, res) => {
       description,
       type,
       validity,
-      photo
+      photo,
+      idCategory
     );
     return res
       .status(200)
