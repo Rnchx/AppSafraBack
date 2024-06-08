@@ -49,6 +49,23 @@ export const getCategoryByName = async (req, res) => {
   }
 };
 
+export const filterProductByCategory = async (req, res) => {
+  try {
+    const { category } = req.params;
+    const products = await categorysRepository.filterProductByCategory(category);
+
+    if (!products) {
+      return res.status(404).send({ message: "Produtos não encontrados" });
+    }
+
+    return res.status(200).send({ message: "Produtos encontrados", products });
+  } catch (error) {
+    return res
+      .status(500)
+      .send({ message: "Erro ao buscar produto", error: error.message });
+  }
+};
+
 export const createCategory = async (req, res) => {
   try {
     const { name } = req.body;

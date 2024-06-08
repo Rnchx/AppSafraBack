@@ -41,6 +41,19 @@ export default class CategorysRepository {
     }
   }
 
+  async filterProductByCategory(category) {
+    try {
+      const product = await this.db.manyOrNone(
+        "SELECT * FROM categorys INNER JOIN products ON categorys.id = products.idCategory WHERE categorys.name = $1",
+        category
+      );
+      return product;
+    } catch (error) {
+      console.error(`Failed to get filter product by category ${category}:`, error);
+      throw error;
+    }
+  }
+
   async createCategory(category) {
     console.log(category);
     try {
