@@ -62,7 +62,7 @@ export const filterProductByCategory = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .send({ message: "Erro ao buscar produto", error: error.message });
+      .send({ message: "Erro ao buscar produtos filtrados", error: error.message });
   }
 };
 
