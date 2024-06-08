@@ -44,7 +44,7 @@ export default class CategorysRepository {
   async filterProductByCategory(category) {
     try {
       const product = await this.db.manyOrNone(
-        "SELECT * FROM categorys INNER JOIN products ON categorys.id = products.idCategory WHERE categorys.name = $1",
+        "SELECT * FROM categorys INNER JOIN products ON categorys.id = products.idcategory WHERE categorys.name = $1",
         category
       );
       return product;

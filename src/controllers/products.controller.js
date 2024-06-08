@@ -74,11 +74,28 @@ export const getProductByType = async (req, res) => {
   }
 };
 
+export const getProductidCategory = async (req, res) => {
+  try {
+    const { category } = req.params;
+    const product = await productsRepository.getProductByidCategory(category);
+
+    if (!product) {
+      return res.status(404).send({ message: "Produto não encontrado" });
+    }
+
+    return res.status(200).send({ message: "Produto encontrado", product });
+  } catch (error) {
+    return res
+      .status(500)
+      .send({ message: "Erro ao buscar produto", error: error.message });
+  }
+};
+
 export const createProduct = async (req, res) => {
   try {
-    const { name, price, description, type, validity, photo, idCategory } = req.body;
+    const { name, price, description, type, validity, photo, idcategory } = req.body;
 
-    if (name == "" || price == "" || description == "" || type == "" || validity == "" || photo == "" || idCategory == "") {
+    if (name == "" || price == "" || description == "" || type == "" || validity == "" || photo == "" || idcategory == "") {
       return res.status(400).send({ message: "Preencha todos os campos" });
     }
 
@@ -87,7 +104,7 @@ export const createProduct = async (req, res) => {
     }
 
 
-    const product = new Product(name, price, description, type, validity, photo, idCategory);
+    const product = new Product(name, price, description, type, validity, photo, idcategory);
 
     await productsRepository.createProduct(product);
 
@@ -103,7 +120,7 @@ export const createProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, price, description, type, validity, photo, idCategory } = req.body;
+    const { name, price, description, type, validity, photo, idcategory } = req.body;
     const productById = await productsRepository.getProductById(id);
 
     if (!productById) {
@@ -114,7 +131,7 @@ export const updateProduct = async (req, res) => {
       return res.status(400).send({ message: "URL da imagem inválida" });
     }
 
-    if (name == "" || price == "" || description == "" || type == "" || validity == "" || photo == "" || idCategory == "") {
+    if (name == "" || price == "" || description == "" || type == "" || validity == "" || photo == "" || idcategory == "") {
       return res.status(400).send({ message: "Preencha todos os campos" });
     }
 
@@ -126,7 +143,7 @@ export const updateProduct = async (req, res) => {
       type,
       validity,
       photo,
-      idCategory
+      idcategory
     );
     return res
       .status(200)

@@ -11,6 +11,6 @@ CREATE TABLE IF NOT EXISTS products (
   type VARCHAR(100) NOT NULL,
   validity VARCHAR(50) NOT NULL,
   photo VARCHAR(255) NOT NULL,
-  idCategory INT NOT NULL,
-  FOREIGN KEY (idCategory) REFERENCES categorys(id)
+  idcategory INT NOT NULL,
+  FOREIGN KEY (idcategory) REFERENCES categorys(id)
 );

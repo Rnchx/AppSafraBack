@@ -54,11 +54,24 @@ export default class ProductsRepository {
     }
   }
 
+  async getProductByidCategory(category) {
+    try {
+      const product = await this.db.manyOrNone(
+        "SELECT * FROM products WHERE idcategory = $1",
+        category
+      );
+      return product;
+    } catch (error) {
+      console.error(`Failed to get product by category ${type}:`, error);
+      throw error;
+    }
+  }
+
   async createProduct(product) {
     try {
       await this.db.none(
-        "INSERT INTO products (name, price, description, type, validity, photo, idCategory) VALUES ($1, $2, $3, $4, $5, $6, $7)",
-        [product.name, product.price, product.description, product.type, product.validity, product.photo, product.idCategory]
+        "INSERT INTO products (name, price, description, type, validity, photo, idcategory) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+        [product.name, product.price, product.description, product.type, product.validity, product.photo, product.idcategory]
       );
       return product;
     } catch (error) {
@@ -67,7 +80,7 @@ export default class ProductsRepository {
     }
   }
 
-  async updateProduct(id, name, price, description, type, validity, photo, idCategory) {
+  async updateProduct(id, name, price, description, type, validity, photo, idcategory) {
     try {
       const product = await this.getProductById(id);
 
@@ -76,8 +89,8 @@ export default class ProductsRepository {
       }
 
       const updatedProduct = await this.db.one(
-        "UPDATE products SET name = $1, price = $2, description = $3, type = $4, validity = $5, photo = $6, idCategory = $7 WHERE id = $8 RETURNING *",
-        [name, price, description, type, validity, photo, idCategory, id]
+        "UPDATE products SET name = $1, price = $2, description = $3, type = $4, validity = $5, photo = $6, idcategory = $7 WHERE id = $8 RETURNING *",
+        [name, price, description, type, validity, photo, idcategory, id]
       );
 
       return updatedProduct;

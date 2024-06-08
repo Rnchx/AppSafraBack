@@ -5,6 +5,7 @@ import {
   getProductById,
   getProductByName,
   getProductByType,
+  getProductidCategory,
   createProduct,
   updateProduct,
   deleteProduct,
@@ -16,6 +17,7 @@ productsRouter.get("/", getProducts);
 productsRouter.get("/:id", getProductById);
 productsRouter.get("/name/:name", getProductByName);
 productsRouter.get("/type/:type", getProductByType);
+productsRouter.get("/idCategory/:category", getProductidCategory);
 productsRouter.post("/", createProduct);
 productsRouter.put("/:id", updateProduct);
 productsRouter.delete("/:id", deleteProduct);
